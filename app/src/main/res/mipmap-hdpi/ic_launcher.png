@@ -1,0 +1,73 @@
+package com.example.signalstrength.util.data
+
+import android.location.Location
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.signalstrength.util.Constants
+import com.example.signalstrength.util.data.model.DownloadInfo
+import com.example.signalstrength.util.data.model.HostLocationInfo
+import com.example.signalstrength.util.data.model.PingInfo
+import com.example.signalstrength.util.data.model.UploadInfo
+import kotlinx.coroutines.*
+import java.io.BufferedReader
+import java.io.DataOutputStream
+import java.io.InputStreamReader
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.net.HttpURLConnection
+import java.net.URL
+import java.util.*
+
+class SpeedTestDataSource {
+    suspend fun fetchHostLocation(): LiveData<HostLocationInfo> {
+        val hostLocation = MutableLiveData<HostLocationInfo>()
+        GlobalScope.launch(Dispatchers.IO) {
+            var hostLat: Double = 0.0
+            var hostLon: Double = 0.0
+            try {
+                val url = URL(Constants.URL_CONFIG)
+                val urlConnection = url.openConnection() as HttpURLConnection
+                val code = urlConnection.responseCode
+
+                if (code == 200) {
+                    val bufferedReader = BufferedReader(
+                        InputStreamReader(
+                            urlConnection.inputStream
+                        )
+                    )
+
+                    var line: String
+                    while (bufferedReader.readLine().let { line = it; it != null }) {
+                        if (!line.contains("isp=")) {
+                            continue
+                        }
+                        hostLat =
+                            java.lang.Double.parseDouble(
+                                line.split("lat=\"".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1].split(
+                                    " ".toRegex()
+                                ).dropLastWhile { it.isEmpty() }.toTypedArray()[0].replace("\"", "")
+                            )
+                        hostLon =
+                            java.lang.Double.parseDouble(
+                                line.split("lon=\"".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1].split(
+                                    " ".toRegex()
+                                ).dropLastWhile { it.isEmpty() }.toTypedArray()[0].replace("\"", "")
+                            )
+                        break
+                    }
+
+                    bufferedReader.close()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            var uploadAddress = ""
+            var name = ""
+            var country = ""
+            var cc = ""
+            var sponsor = ""
+            var lat = ""
+            var lon = ""
+            var hos

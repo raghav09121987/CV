@@ -1,0 +1,237 @@
+package com.example.signalstrength.ui.strength.cellular
+
+import android.os.Build
+import androidx.lifecycle.ViewModelProviders
+import android.os.Bundle
+import android.telephony.*
+import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.lifecycle.Observer
+
+import com.example.signalstrength.R
+import kotlinx.android.synthetic.main.cellular_strength_fragment.*
+
+class CellilarStrengthFragmentSim2 : Fragment() {
+
+
+    val TAG = "Raghav"
+
+    companion object {
+        fun newInstance() = CellilarStrengthFragmentSim2()
+    }
+
+    private lateinit var viewModel: CellularStrengthViewModel
+    private var registeredCellInfoList = ArrayList<CellInfo>()
+    private var cellInfoType = ArrayList<String>()
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.cellular_strength_fragment, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(CellularStrengthViewModel::class.java)
+
+        viewModel.provideCellInfo().observe(this, Observer<List<CellInfo>> { cellInfoList ->
+            val lCurrentApiVersion = Build.VERSION.SDK_INT
+            if (cellInfoList != null) {
+                for (info in cellInfoList) {
+                    if (info is CellInfoGsm && info.isRegistered) {
+                        Log.e("###############GSM", info.toString())
+                        cellInfoType.add("GSM")
+                        registeredCellInfoList.add(info)
+                    } else if (info is CellInfoCdma && info.isRegistered) {
+                        val cdma = info.cellSignalStrength
+                        val identityCdma = info.cellIdentity
+                        speedMeter.setNetworkType("CDMA")
+                    } else if (info is CellInfoLte && info.isRegistered) {
+                        // Signal Strength
+                        Log.e("###############LTE", info.toString())
+                        registeredCellInfoList.add(info)
+                        cellInfoType.add("LTE")
+                    } else if (lCurrentApiVersion >= Build.VERSION_CODES.JELLY_BEAN_MR2 && info is CellInfoWcdma
+                        && info.isRegistered
+                    ) {
+                        Log.e("###############CDMA", info.toString())
+                        registeredCellInfoList.add(info)
+                        cellInfoType.add("WCDMA")
+                    } else {
+                        Log.i(
+                            TAG, TAG + "Unknown type of cell signal!"
+                                    + "\n ClassName: " + info.javaClass.simpleName
+                                    + "\n ToString: " + info.toString()
+                        )
+                    }
+                }
+                if (cellInfoType.size > 1 && cellInfoType[1].equals("GSM")) {
+                    titleText.text = viewModel.getSubscriptionInfo()[0].carrierName
+                    speedMeter.setNetworkType("GSM")
+                    layout_lte.visibility = View.GONE
+                    layout_GSM.visibility = View.VISIBLE
+                    val gsm = (registeredCellInfoList[1] as CellInfoGsm).cellSignalStrength
+                    val identityGsm = (registeredCellInfoList[1] as CellInfoGsm).cellIdentity
+                    speedMeter.startProgressAnimation((gsm.dbm.toFloat() * (-1)))
+                    layout_lte.visibility = View.GONE
+                    layout_GSM.visibility = View.VISIBLE
+                    mccValueGSM.text = identityGsm.mcc.toString()
+                    mncValueGSM.text = identityGsm.mnc.toString()
+                    lacValueGSM.text = identityGsm.lac.toString()
+                    cidValueGSM.text = identityGsm.cid.toString()
+                    rsrpValueGSM.text = gsm.dbm.toString()
+                    if ((gsm.dbm.toFloat() * (-1)) <= 95) {
+                        rsrpValueGSM.setTextColor(
+                            resources.getColor(android.R.color.holo_green_dark, null)
+                        )
+                        titleText.setTextColor(
+                            resources.getColor(android.R.color.holo_green_dark, null)
+                        )
+                    } else if ((gsm.dbm.toFloat() * (-1)) > 95 && (gsm.dbm.toFloat() * (-1)) <= 110) {
+                        rsrpValueGSM.setTextColor(
+                            resources.getColor(android.R.color.holo_orange_dark, null)
+                        )
+                        titleText.setTextColor(
+                            resources.getColor(android.R.color.holo_orange_dark, null)
+                        )
+                    } else {
+                        rsrpValueGSM.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_red_dark, null)
+                        )
+                        titleText.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_red_dark, null)
+                        )
+                    }
+                } else if (cellInfoType.size > 1 && cellInfoType[1].equals("LTE")) {
+                    titleText.text = viewModel.getSubscriptionInfo()[0].carrierName
+                    speedMeter.setNetworkType("LTE")
+                    layout_GSM.visibility = View.GONE
+                    layout_lte.visibility = View.VISIBLE
+                    val lte = (registeredCellInfoList[1] as CellInfoLte).cellSignalStrength
+                    val identityLte = (registeredCellInfoList[1] as CellInfoLte).cellIdentity
+                    mccValue.text = identityLte.mcc.toString()
+                    mncValue.text = identityLte.mnc.toString()
+                    tacValue.text = identityLte.tac.toString()
+                    pciValue.text = identityLte.pci.toString()
+                    rsrpValue.text = lte.rsrp.toString()
+                    asuValue.text = lte.asuLevel.toString()
+                    rsrqValue.text = lte.rsrq.toString()
+                    rssnrValue.text = lte.rssnr.toString()
+                    cqiValue.text = lte.cqi.toString()
+
+                    speedMeter.startProgressAnimation((lte.rsrp.toFloat() * (-1)))
+                    if ((lte.rsrp.toFloat() * (-1)) <= 95) {
+                        rsrpValue.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_green_dark, null)
+                        )
+                        titleText.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_green_dark, null)
+                        )
+                    } else if ((lte.rsrp.toFloat() * (-1)) > 95 && (lte.rsrp.toFloat() * (-1)) <= 110) {
+                        rsrpValue.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_orange_dark, null)
+                        )
+                        titleText.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_orange_dark, null)
+                        )
+                    } else {
+                        rsrpValue.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_red_dark, null)
+                        )
+                        titleText.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_red_dark, null)
+                        )
+                    }
+                } else if (cellInfoType.size > 1 && cellInfoType[1].equals("WCDMA")) {
+                    titleText.text = viewModel.getSubscriptionInfo()[0].carrierName
+                    layout_lte.visibility = View.GONE
+                    layout_GSM.visibility = View.VISIBLE
+                    speedMeter.setNetworkType("WCDMA")
+                    val wcdma = (registeredCellInfoList[1] as CellInfoWcdma).cellSignalStrength
+                    val identityWcdma = (registeredCellInfoList[1] as CellInfoWcdma).cellIdentity
+                    mccValueGSM.text = identityWcdma.mcc.toString()
+                    mncValueGSM.text = identityWcdma.mnc.toString()
+                    lacValueGSM.text = identityWcdma.lac.toString()
+                    cidValueGSM.text = identityWcdma.cid.toString()
+                    rsrpValueGSM.text = wcdma.dbm.toString()
+                    speedMeter.startProgressAnimation((wcdma.dbm.toFloat() * (-1)))
+                    if ((wcdma.dbm.toFloat() * (-1)) <= 95) {
+                        rsrpValueGSM.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_green_dark, null)
+                        )
+                        titleText.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_green_dark, null)
+                        )
+                    } else if ((wcdma.dbm.toFloat() * (-1)) > 95 && (wcdma.dbm.toFloat() * (-1)) <= 110) {
+                        rsrpValueGSM.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_orange_dark, null)
+                        )
+                        titleText.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_orange_dark, null)
+                        )
+                    } else {
+                        rsrpValueGSM.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_red_dark, null)
+                        )
+                        titleText.setTextColor(
+                            resources
+                                .getColor(android.R.color.holo_red_dark, null)
+                        )
+                    }
+                }else{
+                    layout_GSM.visibility = View.GONE
+                    layout_lte.visibility = View.GONE
+                    speedMeter.setNetworkType("No Signal")
+                    titleText.text = "No Signal"
+                }
+            }
+            registeredCellInfoList.clear()
+            cellInfoType.clear()
+        })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.removeSource()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.removeSource()
+        registeredCellInfoList.clear()
+        cellInfoType.clear()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.getCellInfo()
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        registeredCellInfoList.clear()
+        cellInfoType.clear()
+    }
+}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         

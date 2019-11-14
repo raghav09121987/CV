@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":app" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="android-gradle" name="Android-Gradle">
+      <configuration>
+        <option name="GRADLE_PROJECT_PATH" value=":app" />
+      </configuration>
+    </facet>
+    <facet type="android" name="Android">
+      <configuration>
+        <option name="SELECTED_BUILD_VARIANT" value="debug" />
+        <option name="ASSEMBLE_TASK_NAME" value="assembleDebug" />
+        <option name="COMPILE_JAVA_TASK_NAME" value="compileDebugSources" />
+        <afterSyncTasks>
+          <task>generateDebugSources</task>
+        </afterSyncTasks>
+        <option name="ALLOW_USER_CONFIGURATION" value="false" />
+        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
+        <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/src/main/res;file://$MODULE_DIR$/build/generated/res/resValues/debug" />
+        <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="" />
+        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
+      </configuration>
+    </facet>
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="3" platform="JVM 1.6" useProjectSettings="false">
+        <compilerSettings />
+        <compilerArguments>
+          <option name="destination" value="$MODULE_DIR$/build/tmp/kotlin-classes/debug" />
+          <option name="classpath" value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-android-extensions-runtime/1.3.31/721b62ccbafe51a284ca0d1c5dcfdce8cedd4255/kotlin-android-extensions-runtime-1.3.31.jar;C:/Users/Raghav/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.3.31/e652770b6416c6d85934086899ffed3eccd35813/kotlin-stdlib-jdk7-1.3.31.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/dc12315bea150bf84b5f5aaf1d163b9e/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/5ebe0bbdbcbf182f49bd8b96e7b99f64/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/8d267fd15bda1e9af2e60ab34dba8740/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/a79a0489fa56975bf1399fc3e028db40/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/f20f157b6730543a7c0cfa6c98e976ff/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/a84f3c5afe639d0e1d56a5b0dfc4f5d6/jetified-kotlinx-coroutines-android-1.1.1.jar;C:/Users/Raghav/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core/1.3.0-M1/a89c1a47eb68d6795e2737d84ba1bd81e146ac03/kotlinx-coroutines-core-1.3.0-M1.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/9ff33f2a1740127ee0d1f28e352d1784/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/6266aa98481cde620f7cf347548a250b/jars/classes.jar;C:/Users/Raghav/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.31/11289d20fd95ae219333f3456072be9f081c30cc/kotlin-stdlib-1.3.31.jar;C:/Users/Raghav/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.3.31/20c34a04ea25cb1ef0139598bd67c764562cb170/kotlin-stdlib-common-1.3.31.jar;C:/Users/Raghav/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/d8e8ae954804379a398090b2d81db811/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/933d4ca41679d52e6c442bd7bf97d169/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/0e6ce0de997865750946c89266df7aca/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/930ea8e94bce4f4a206e6915fe055a27/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/6aa9b976a7a32e026d69fdb250ccb71c/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/a01f5c27e9b64da2a696a60f5e59fb98/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/4b6bb56e8eb0f40584cc160fe1846b80/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/23b1aae56b1ad9da3f9e0550f11d3f91/jars/classes.jar;C:/Users/Raghav/.gradle/caches/transforms-2/files-2.1/5c1857e
